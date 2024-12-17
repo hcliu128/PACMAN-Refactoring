@@ -75,7 +75,6 @@ def startGame():
   turn_steps = {"Pinky": [p_turn, p_steps], "Blinky": [b_turn, b_steps], "Inky": [i_turn, i_steps], "Clyde": [c_turn, c_steps]}
   directions = [Pinky_directions, Blinky_directions, Inky_directions, Clyde_directions]
   lengths = [pl, bl, il, cl]
-  i = 5
   while not done:
       # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
       for event in pygame.event.get():
@@ -112,7 +111,6 @@ def startGame():
         ret = character.changespeed(directions[idx], character.name, turn_steps[character.name][0], turn_steps[character.name][1], lengths[idx])
         turn_steps[character.name][0] = ret[0]
         turn_steps[character.name][1] = ret[1]
-        print(character.name, directions[idx][ret[0]])
         character.changespeed(directions[idx], character.name, turn_steps[character.name][0], turn_steps[character.name][1], lengths[idx])
         character.update(wall_list,False)
 
@@ -145,8 +143,7 @@ def startGame():
       pygame.display.flip()
     
       clock.tick(10)
-      i+=1
-      # if i == 10: done = 1
+
 
 def doNext(message, left, all_sprites_list, block_list, monsta_list, pacman_collide, wall_list, gate):
   while True:
