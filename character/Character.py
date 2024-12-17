@@ -1,6 +1,7 @@
 import pygame
+import abc
 
-class Character(pygame.sprite.Sprite):
+class Character(pygame.sprite.Sprite, abc.ABC):
   
     # Set speed vector
     change_x=0
@@ -26,9 +27,10 @@ class Character(pygame.sprite.Sprite):
         self.prev_x = self.change_x
         self.prev_y = self.change_y
 
+    @abc.abstractmethod
     # Change the speed of the player => overwrite
     def changespeed(self,x,y):
-        pass
+        return NotImplemented
           
     # Find a new position for the player
     def update(self,walls,gate):

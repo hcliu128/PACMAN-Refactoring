@@ -4,7 +4,7 @@ import utils.Colors as Colors
 # This class represents the bar at the bottom that the player controls
 class Wall(pygame.sprite.Sprite):
     # Constructor function
-    def __init__(self,x,y,width,height, color):
+    def __init__(self, x, y, width, height, color):
         # Call the parent's constructor
         pygame.sprite.Sprite.__init__(self)
   

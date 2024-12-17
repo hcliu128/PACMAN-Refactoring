@@ -117,7 +117,7 @@ def startGame():
         character.update(wall_list,False)
 
       # See if the Pacman block has collided with anything.
-      blocks_hit_list = pygame.sprite.spritecollide(Pacman, block_list, True) # True -> delete the blocks
+      blocks_hit_list = pygame.sprite.spritecollide(Pacman, block_list, True) # True -> delete the blocks and return a list of blocks
       # Check the list of collisions.
       if len(blocks_hit_list) > 0:
           score += len(blocks_hit_list)

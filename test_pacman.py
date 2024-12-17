@@ -2,7 +2,13 @@
 import unittest
 from unittest.mock import MagicMock, patch
 import pygame
-from pacman import Player, Wall  
+from character.Player import Player
+from character.Ghost import Ghost
+from utils.Block import Block
+from utils.Settings import Blinky_directions, Inky_directions, Clyde_directions, Pinky_directions, pl, bl, il, cl
+from utils.Wall import Wall
+import utils.Colors as Colors
+from utils.init import initialize
 
 class TestPacman(unittest.TestCase):
     def setUp(self):
