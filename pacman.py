@@ -54,8 +54,8 @@ def startGame():
             block = Block(Colors.yellow, 4, 4)
 
             # Set a random location for the block
-            block.rect.x = (30*column+6)+26
-            block.rect.y = (30*row+6)+26
+            block.rect.x = (30 * column + 6) + 26
+            block.rect.y = (30 * row + 6) + 26
 
             b_collide = pygame.sprite.spritecollide(block, wall_list, False)
             p_collide = pygame.sprite.spritecollide(block, pacman_collide, False)
@@ -71,7 +71,11 @@ def startGame():
   bll = len(block_list)
   score = 0
   done = False
-
+  characters = [Pinky, Blinky, Inky, Clyde]
+  turn_steps = {"Pinky": [p_turn, p_steps], "Blinky": [b_turn, b_steps], "Inky": [i_turn, i_steps], "Clyde": [c_turn, c_steps]}
+  directions = [Pinky_directions, Blinky_directions, Inky_directions, Clyde_directions]
+  lengths = [pl, bl, il, cl]
+  i = 5
   while not done:
       # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
       for event in pygame.event.get():
@@ -80,13 +84,13 @@ def startGame():
 
           if event.type == pygame.KEYDOWN:
               if event.key == pygame.K_LEFT:
-                  Pacman.changespeed(-30,0)
+                  Pacman.changespeed(-30, 0)
               if event.key == pygame.K_RIGHT:
-                  Pacman.changespeed(30,0)
+                  Pacman.changespeed(30, 0)
               if event.key == pygame.K_UP:
-                  Pacman.changespeed(0,-30)
+                  Pacman.changespeed(0, -30)
               if event.key == pygame.K_DOWN:
-                  Pacman.changespeed(0,30)
+                  Pacman.changespeed(0, 30)
 
           # 避免鬆開按鈕還在移動
           if event.type == pygame.KEYUP:
@@ -103,44 +107,22 @@ def startGame():
       # ALL GAME LOGIC SHOULD GO BELOW THIS COMMENT
       Pacman.update(wall_list,gate)
 
-      characters = [Pinky, Blinky, Inky, Clyde]
-      turn_steps = {"Pinky": [p_turn, p_steps], "Blinky": [b_turn, b_steps], "Inky": [i_turn, i_steps], "Clyde": [c_turn, c_steps]}
-      directions = [Pinky_directions, Blinky_directions, Inky_directions, Clyde_directions]
-      lengths = [pl, bl, il, cl]
-
-      returned = Pinky.changespeed(Pinky_directions,Pinky.name,p_turn,p_steps,pl)
-      p_turn = returned[0]
-      p_steps = returned[1]
-      Pinky.changespeed(Pinky_directions,Pinky.name,p_turn,p_steps,pl)
-      Pinky.update(wall_list,False)
-
-      returned = Blinky.changespeed(Blinky_directions,Blinky.name,b_turn,b_steps,bl)
-      b_turn = returned[0]
-      b_steps = returned[1]
-      Blinky.changespeed(Blinky_directions,Blinky.name,b_turn,b_steps,bl)
-      Blinky.update(wall_list,False)
-
-      returned = Inky.changespeed(Inky_directions,Inky.name,i_turn,i_steps,il)
-      i_turn = returned[0]
-      i_steps = returned[1]
-      Inky.changespeed(Inky_directions,False,i_turn,i_steps,il)
-      Inky.update(wall_list,False)
-
-      returned = Clyde.changespeed(Clyde_directions,Clyde.name,c_turn,c_steps,cl)
-      c_turn = returned[0]
-      c_steps = returned[1]
-      Clyde.changespeed(Clyde_directions,Clyde.name,c_turn,c_steps,cl)
-      Clyde.update(wall_list,False)
+      
+      for idx, character in enumerate(characters):
+        ret = character.changespeed(directions[idx], character.name, turn_steps[character.name][0], turn_steps[character.name][1], lengths[idx])
+        turn_steps[character.name][0] = ret[0]
+        turn_steps[character.name][1] = ret[1]
+        print(character.name, directions[idx][ret[0]])
+        character.changespeed(directions[idx], character.name, turn_steps[character.name][0], turn_steps[character.name][1], lengths[idx])
+        character.update(wall_list,False)
 
       # See if the Pacman block has collided with anything.
       blocks_hit_list = pygame.sprite.spritecollide(Pacman, block_list, True) # True -> delete the blocks
-       
       # Check the list of collisions.
       if len(blocks_hit_list) > 0:
           score += len(blocks_hit_list)
       
       # ALL GAME LOGIC SHOULD GO ABOVE THIS COMMENT
-   
       # ALL CODE TO DRAW SHOULD GO BELOW THIS COMMENT
       screen.fill(Colors.black)
         
@@ -153,20 +135,20 @@ def startGame():
       screen.blit(text, [10, 10])
 
       if score == bll:
-        doNext("Congratulations, you won!",145,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate)
-
+        doNext("Congratulations, you won!", 145, all_sprites_list, block_list, monsta_list, pacman_collide, wall_list, gate)
       monsta_hit_list = pygame.sprite.spritecollide(Pacman, monsta_list, False)
-
       if monsta_hit_list:
-        doNext("Game Over",235,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate)
+        doNext("Game Over", 235, all_sprites_list, block_list, monsta_list, pacman_collide, wall_list, gate)
 
       # ALL CODE TO DRAW SHOULD GO ABOVE THIS COMMENT
       
       pygame.display.flip()
     
       clock.tick(10)
+      i+=1
+      # if i == 10: done = 1
 
-def doNext(message,left,all_sprites_list,block_list,monsta_list,pacman_collide,wall_list,gate):
+def doNext(message, left, all_sprites_list, block_list, monsta_list, pacman_collide, wall_list, gate):
   while True:
       # ALL EVENT PROCESSING SHOULD GO BELOW THIS COMMENT
       for event in pygame.event.get():
@@ -191,12 +173,12 @@ def doNext(message,left,all_sprites_list,block_list,monsta_list,pacman_collide,w
       screen.blit(w, (100,200))    # (0,0) are the top-left coordinates
 
       #Won or lost
-      text1=font.render(message, True, Colors.white)
+      text1 = font.render(message, True, Colors.white)
       screen.blit(text1, [left, 233])
 
-      text2=font.render("To play again, press ENTER.", True, Colors.white)
+      text2 = font.render("To play again, press ENTER.", True, Colors.white)
       screen.blit(text2, [135, 303])
-      text3=font.render("To quit, press ESCAPE.", True, Colors.white)
+      text3 = font.render("To quit, press ESCAPE.", True, Colors.white)
       screen.blit(text3, [165, 333])
 
       pygame.display.flip()
